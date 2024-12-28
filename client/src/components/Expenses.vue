@@ -101,11 +101,11 @@
     }
   ])
   const headers = ref([
-      { title: 'Date', value: 'date' },
-      { title: 'Category', value: 'category'},
-      { title: 'Payee', value: 'payee'},
-      { title: 'Description', value: 'description'},
-      { title: 'Price', value: 'price' },
+      { title: 'Date', value: 'date', sortable: true },
+      { title: 'Category', value: 'category', sortable: true },
+      { title: 'Payee', value: 'payee', sortable: true },
+      { title: 'Description', value: 'description', sortable: true },
+      { title: 'Price', value: 'price', sortable: true},
       { title: 'Actions', value: 'actions', sortable: false }
   ])
 
