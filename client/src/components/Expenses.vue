@@ -72,7 +72,7 @@
 <script setup>
   import { ref, computed } from 'vue'
   import { formattedDate } from './helper.js'
-  import model.Expense from "@/components/Expense.vue";
+  import Expense from "@/components/Expense.vue";
 
   const showExpenseDialog = ref(false)
   const expenseItem = ref({})
