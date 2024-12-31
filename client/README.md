@@ -1,4 +1,4 @@
-# Expense Tracker
+# model.Expense Tracker
 
 A basic expense tracker to keep record of transactions for a budget
 

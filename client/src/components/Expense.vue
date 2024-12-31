@@ -1,28 +1,47 @@
 <template>
   <v-card
-    class="justify-center pa-4"
+    class="pa-4 ma-auto"
     width="400px"
   >
-    <v-text-field placeholder="Date" v-model="date"></v-text-field>
-    <v-text-field placeholder="Category" v-model="category"></v-text-field>
-    <v-text-field placeholder="Payee" v-model="payee"></v-text-field>
-    <v-text-field placeholder="Description" v-model="description"></v-text-field>
-    <v-text-field placeholder="Price" v-model="price"></v-text-field>
-    <template v-slot:actions>
+    <v-form
+      v-model="expenseForm"
+      @submit.prevent="onSubmit"
+    >
+      <v-text-field placeholder="Date" v-model="date" :rules="[dateMaskRule]" persistent-hint hint="MM/DD/YYYY"></v-text-field>
+      <v-text-field placeholder="Category" v-model="category"></v-text-field>
+      <v-text-field placeholder="Payee" v-model="payee"></v-text-field>
+      <v-text-field placeholder="Description" v-model="description"></v-text-field>
+      <v-text-field placeholder="Price" v-model="price"></v-text-field>
       <v-btn
-        class="ms-auto"
-        :text="props.isNew === true ? 'Create Expense' : 'Save Expense'"
-        @click="props.isNew === true ? createNewExpense() : saveCurrentExpense()">
+          :disabled="!expenseForm"
+          :loading="loading"
+          color="success"
+          size="large"
+          type="submit"
+          variant="elevated"
+          block
+          @click="props.isNew === true ? createNewExpense() : saveCurrentExpense()">
+        {{ props.isNew === true ? 'Create model.Expense' : 'Save model.Expense' }}
       </v-btn>
-    </template>
+
+    </v-form>
   </v-card>
 </template>
 
 <script setup>
 
 import { ref, onMounted } from 'vue'
+import {formattedDate} from "@/components/helper.js";
 
 const emit = defineEmits(['createNew', 'saveExpense'])
+
+const date = ref('')
+const category = ref('')
+const payee = ref('')
+const description = ref('')
+const price = ref('')
+const expenseForm = ref(false)
+const loading = ref(false)
 
 const props = defineProps({
   isNew: {
@@ -41,19 +60,26 @@ onMounted(() => {
   loadProps()
 })
 
+const dateMaskRule = (val) => {
+  const re = new RegExp("[0-9]{2}\/[0-9]{2}\/[0-9]{4}")
+  if (re.test(val)) {
+    return true
+  }
+  return "MM/DD/YYYY"
+}
+
+const onSubmit = () => {
+  if (!expenseForm.value) return
+  console.log('expenseForm.value is true')
+  loading.value = true
+}
 const loadProps = () => {
-  date.value = props?.expense?.date
+  date.value = formattedDate(props?.expense?.date)
   category.value = props?.expense?.category
   payee.value = props?.expense?.payee
   description.value = props?.expense?.description
   price.value = props?.expense?.price
 }
-
-const date = ref('')
-const category = ref('')
-const payee = ref('')
-const description = ref('')
-const price = ref('')
 
 const createNewExpense = () => {
   let newExpense = {

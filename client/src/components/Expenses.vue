@@ -8,7 +8,7 @@
     >
       <template v-slot:top>
         <v-toolbar flat color="primary-darken-1">
-          <v-toolbar-title>Expense Tracker</v-toolbar-title>
+          <v-toolbar-title>model.Expense Tracker</v-toolbar-title>
           <v-spacer />
           <v-btn
             rounded
@@ -16,9 +16,13 @@
             @click="openExpenseDialog({}, true)"
             prepend-icon="mdi-plus"
           >
-            Add Expense
+            Add model.Expense
           </v-btn>
         </v-toolbar>
+      </template>
+
+      <template v-slot:item.date="{value}">
+        {{ formattedDate(value) }}
       </template>
       <template v-slot:item.price="{ value }">
         $ {{ value }}
@@ -67,7 +71,8 @@
 
 <script setup>
   import { ref, computed } from 'vue'
-  import Expense from "@/components/Expense.vue";
+  import { formattedDate } from './helper.js'
+  import model.Expense from "@/components/Expense.vue";
 
   const showExpenseDialog = ref(false)
   const expenseItem = ref({})
@@ -77,7 +82,7 @@
   const items = ref([
     {
       id: 1,
-      date: '12/28/2024',
+      date: new Date('12/28/2024'),
       category: 'Groceries',
       payee: 'Walmart',
       description: 'Baja Blast',
@@ -85,7 +90,7 @@
     },
     {
       id: 2,
-      date: '12/27/2024',
+      date: new Date('12/27/2024'),
       category: 'Gifts',
       payee: 'Amazon',
       description: 'Bambu Lab 3D Printer',
@@ -93,7 +98,7 @@
     },
     {
       id: 3,
-      date: '12/20/2024',
+      date: new Date('12/20/2024'),
       category: 'Groceries',
       payee: 'Walmart',
       description: '3 Watermelons for my pet hippo',
@@ -125,13 +130,17 @@
 
   const createExpense = (newExpense) => {
     newExpense.id = currentId.value
+    newExpense.date = new Date(newExpense.date)
     currentId.value = currentId.value + 1
     items.value.push(newExpense)
     closeExpenseDialog()
   }
 
   const saveExpense = (updatedExpense => {
-    console.log("Saving Expense", updatedExpense)
+    console.log("Saving model.Expense", updatedExpense)
+
+    updatedExpense.date = new Date(updatedExpense.date)
+
     let newItems = []
     items.value.forEach((e) => {
       if (e.id === updatedExpense.id) {
